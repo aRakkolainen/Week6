@@ -8,7 +8,8 @@
     "build": "parcel build index.html"
   },
   "dependencies": {
-    "parcel-bundler": "^1.6.1"
+    "frappe-charts": "^1.6.2",
+    "parcel-bundler": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "7.2.0",
