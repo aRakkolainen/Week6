@@ -71,3 +71,4 @@ const getData = async () => {
   const resultData = await response.json();
   return resultData;
 };
+getData();
