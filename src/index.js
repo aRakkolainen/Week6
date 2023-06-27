@@ -72,3 +72,4 @@ const getData = async () => {
   return resultData;
 };
 getData();
+console.log("Hello");
