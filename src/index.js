@@ -79,7 +79,7 @@ const getAreaCode = async () => {
     index = areaNames.indexOf(newMunicipality);
     return areaCodes[index];
   } else {
-    return;
+    return "SSS";
   }
 };
 //getAreaCode()
