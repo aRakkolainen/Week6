@@ -1,8 +1,5 @@
-//Based on the course material and demo6
-
-import "./styles.css";
-
-const jsonQuery = {
+import { Chart } from "frappe-charts";
+let jsonQuery = {
   query: [
     {
       code: "Vuosi",
@@ -54,10 +51,44 @@ const jsonQuery = {
     format: "json-stat2"
   }
 };
+const getAreaCode = async () => {
+  const url =
+    "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px";
+  const response = await fetch(url, {
+    method: "GET"
+  });
 
+  const data = await response.json();
+  const municipality = document.getElementById("input-area").value;
+  let areaNames = data.variables[1].valueTexts;
+  let areaCodes = data.variables[1].values;
+  let index;
+  let newMunicipality;
+  if (municipality !== "") {
+    if (
+      (municipality === "Whole Country") |
+      (municipality === "Whole country") |
+      (municipality === "whole country")
+    ) {
+      newMunicipality = municipality.toUpperCase();
+    } else {
+      //How to make first letter capitalized: https://flexiple.com/javascript/javascript-capitalize-first-letter/
+      newMunicipality =
+        municipality.charAt(0).toUpperCase() + municipality.slice(1);
+    }
+    index = areaNames.indexOf(newMunicipality);
+    return areaCodes[index];
+  } else {
+    return;
+  }
+};
+//getAreaCode()
 const getData = async () => {
   const url =
     "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px";
+  const areaCode = await getAreaCode();
+  //New areacode based on the form
+  jsonQuery.query[1].selection.values[0] = areaCode;
   const response = await fetch(url, {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -71,5 +102,27 @@ const getData = async () => {
   const resultData = await response.json();
   return resultData;
 };
-getData();
-console.log("Hello");
+//import { Chart } from "frappe-charts/dist/frappe-charts.min.esm"
+const buildChart = async () => {
+  const resultData = await getData();
+  const labelYears = Object.values(resultData.dimension.Vuosi.category.label);
+  const values = Object.values(resultData.value);
+  const chartData = {
+    labels: labelYears,
+    datasets: [{ values: values }]
+  };
+  const chart = new Chart("#chart", {
+    title: "Population growth",
+    data: chartData,
+    type: "line",
+    height: 450,
+    colors: ["#eb5146"]
+  });
+};
+
+//buildChart()
+
+const submitBtn = document.getElementById("submit-data");
+submitBtn.addEventListener("click", async () => {
+  buildChart();
+});
