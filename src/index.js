@@ -35,7 +35,7 @@ let jsonQuery = {
       code: "Alue",
       selection: {
         filter: "item",
-        values: ["SSS"]
+        values: ['SSS']
       }
     },
 
@@ -65,11 +65,7 @@ const getAreaCode = async () => {
   let index;
   let newMunicipality;
   if (municipality !== "") {
-    if (
-      (municipality === "Whole Country") |
-      (municipality === "Whole country") |
-      (municipality === "whole country")
-    ) {
+    if ((municipality === "Whole Country") || (municipality === "Whole country") ||(municipality === "whole country")) {
       newMunicipality = municipality.toUpperCase();
     } else {
       //How to make first letter capitalized: https://flexiple.com/javascript/javascript-capitalize-first-letter/
@@ -84,16 +80,14 @@ const getAreaCode = async () => {
 };
 //getAreaCode()
 const getData = async () => {
+  let response; 
   const url =
     "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px";
-  const areaCode = await getAreaCode();
-  //New areacode based on the form
-  jsonQuery.query[1].selection.values[0] = areaCode;
-  const response = await fetch(url, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(jsonQuery)
-  });
+    response = await fetch(url, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(jsonQuery)
+    });
 
   if (!response.ok) {
     return;
@@ -124,5 +118,8 @@ const buildChart = async () => {
 
 const submitBtn = document.getElementById("submit-data");
 submitBtn.addEventListener("click", async () => {
+  const areaCode = await getAreaCode();
+  jsonQuery.query[1].selection.values[0] = areaCode;
   buildChart();
 });
+buildChart();
