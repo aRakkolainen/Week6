@@ -265,7 +265,7 @@ var buildChart = /*#__PURE__*/function () {
           });
           addDataBtn = document.getElementById("add-data");
           addDataBtn.addEventListener("click", function () {
-            //console.log("Adding estimate data to the graph...") 
+            console.log("Adding estimate data to the graph...");
             var sum = 0;
             for (var i = 1; i < values.length; i++) {
               var delta = values[i] - values[i - 1];

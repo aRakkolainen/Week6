@@ -115,7 +115,7 @@ const buildChart = async () => {
 
   const addDataBtn = document.getElementById("add-data");
   addDataBtn.addEventListener("click", () => {
-    //console.log("Adding estimate data to the graph...") 
+    console.log("Adding estimate data to the graph...") 
   let sum = 0; 
   for (let i=1; i < values.length; i++) {
     let delta = values[i]-values[i-1]
