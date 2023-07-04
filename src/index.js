@@ -112,9 +112,27 @@ const buildChart = async () => {
     height: 450,
     colors: ["#eb5146"]
   });
+
+  const addDataBtn = document.getElementById("add-data");
+  addDataBtn.addEventListener("click", () => {
+    //console.log("Adding estimate data to the graph...") 
+  let sum = 0; 
+  for (let i=1; i < values.length; i++) {
+    let delta = values[i]-values[i-1]
+    sum += delta
+  }
+  let mean = sum / values.length; 
+  let currentYear = labelYears[labelYears.length-1]
+  //How to convert string to integer: https://www.tutorialspoint.com/how-to-convert-a-string-into-integer-in-javascript
+  let nextYear = parseInt(currentYear) + 1
+  let estimate = mean + values[values.length-1]
+  labelYears.push(nextYear)
+  estimate = Math.ceil(estimate)
+  chart.addDataPoint(nextYear,[estimate])  
+  values.push(estimate)
+});
 };
 
-//buildChart()
 
 const submitBtn = document.getElementById("submit-data");
 submitBtn.addEventListener("click", async () => {
@@ -123,3 +141,4 @@ submitBtn.addEventListener("click", async () => {
   buildChart();
 });
 buildChart();
+

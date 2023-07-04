@@ -240,7 +240,7 @@ var getData = /*#__PURE__*/function () {
 //import { Chart } from "frappe-charts/dist/frappe-charts.min.esm"
 var buildChart = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-    var resultData, labelYears, values, chartData, chart;
+    var resultData, labelYears, values, chartData, chart, addDataBtn;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
@@ -263,7 +263,25 @@ var buildChart = /*#__PURE__*/function () {
             height: 450,
             colors: ["#eb5146"]
           });
-        case 7:
+          addDataBtn = document.getElementById("add-data");
+          addDataBtn.addEventListener("click", function () {
+            //console.log("Adding estimate data to the graph...") 
+            var sum = 0;
+            for (var i = 1; i < values.length; i++) {
+              var delta = values[i] - values[i - 1];
+              sum += delta;
+            }
+            var mean = sum / values.length;
+            var currentYear = labelYears[labelYears.length - 1];
+            //How to convert string to integer: https://www.tutorialspoint.com/how-to-convert-a-string-into-integer-in-javascript
+            var nextYear = parseInt(currentYear) + 1;
+            var estimate = mean + values[values.length - 1];
+            labelYears.push(nextYear);
+            estimate = Math.ceil(estimate);
+            chart.addDataPoint(nextYear, [estimate]);
+            values.push(estimate);
+          });
+        case 9:
         case "end":
           return _context3.stop();
       }
@@ -273,9 +291,6 @@ var buildChart = /*#__PURE__*/function () {
     return _ref3.apply(this, arguments);
   };
 }();
-
-//buildChart()
-
 var submitBtn = document.getElementById("submit-data");
 submitBtn.addEventListener("click", /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
   var areaCode;
